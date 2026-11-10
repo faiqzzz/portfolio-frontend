@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060709">
+<meta name="color-scheme" content="dark">
+<title>Ridho Faiq Ahmad — Backend & Android Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#060709; --surface:rgba(18, 20, 26, 0.7);
+  --tx:#f4f5f7; --mu:#94a3b8; --mu-dark:#475569;
+  --accent:#ea580c; 
+  --accent-glow:rgba(234, 88, 12, 0.25);
+  --ln:rgba(255,255,255,0.08); --hl:rgba(255,255,255,0.16);
+  --sans:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(0.16, 1, 0.3, 1);
+  --glass:rgba(12, 14, 18, 0.65);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scrollbar-width:none}
+::-webkit-scrollbar{display:none}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#fff}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:12px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px;position:relative;z-index:3}
+
+/* CUSTOM CURSOR (Desktop Only) */
+@media(hover:hover) and (pointer:fine){
+  *{cursor:none!important;}
+  .custom-cursor {
+    position: fixed; top: 0; left: 0;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s var(--ease);
+  }
+  .custom-cursor.hover {
+    width: 44px; height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* AMBIENT & NOISE SYSTEM */
+.bg-ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg)}
+.bg-ambient::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 70% 60% at 50% 20%,#000 20%,transparent 80%)}
+#glow{position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(var(--accent-glow),transparent 65%);transform:translate(-50%,-50%);left:-999px;top:-999px}
+#prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:90;background:linear-gradient(90deg,var(--mu),var(--accent));transform-origin:0 50%;transform:scaleX(var(--p,0))}
+
+/* GLASS SYSTEM */
+nav::before,.avail,.chip,.stat,.grp,.card,.term,.ph .f,#lb figure,.glass-card, .live-status, .feedback-box{background:var(--glass);-webkit-backdrop-filter:blur(30px) saturate(160%);backdrop-filter:blur(30px) saturate(160%);border:1px solid var(--ln);box-shadow:inset 0 1px 0 var(--hl),0 30px 60px -30px rgba(0,0,0,0.85)}
+
+/* NAV FLOATING DOCK */
+nav{position:fixed;top:max(14px,env(safe-area-inset-top));left:0;right:0;margin:auto;width:fit-content;max-width:calc(100% - 24px);z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;isolation:isolate}
+nav::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit}
+nav .lg{font:700 0.95rem var(--sans);letter-spacing:-0.02em;padding:0 14px 0 12px;color:var(--tx)}
+nav .lg i{font-style:normal;color:var(--mu)}
+nav .l{display:flex;gap:2px}
+nav .l a{font-size:0.8rem;font-weight:500;padding:8px 12px;border-radius:999px;color:var(--mu);transition:all 0.3s var(--ease)}
+nav .l a:hover{background:rgba(255,255,255,0.08);color:var(--tx)}
+nav .l a.on{background:rgba(255,255,255,0.14);color:var(--tx);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:999px;font:600 0.88rem var(--sans);border:1px solid rgba(255,255,255,0.3);background:#f4f5f7;color:#060709;box-shadow:0 12px 28px -10px rgba(255,255,255,0.2);transition:transform 0.35s var(--ease),translate 0.25s var(--ease),box-shadow 0.35s,background 0.3s}
+.btn:hover{transform:translateY(-2px) scale(1.02);background:#fff;box-shadow:0 18px 36px -10px rgba(255,255,255,0.4)}
+.btn:active{transform:scale(0.95)}
+.btn.o{background:var(--glass);color:var(--tx);border-color:var(--ln);box-shadow:inset 0 1px 0 var(--hl)}
+.btn.o:hover{background:rgba(255,255,255,0.12);border-color:var(--accent);color:#fff}
+.btn.accent{background:var(--accent);color:#fff;border-color:rgba(234,88,12,0.5);box-shadow:0 12px 28px -10px var(--accent-glow)}
+.btn.accent:hover{background:#f97316;box-shadow:0 18px 36px -10px var(--accent-glow)}
+nav .btn{padding:8px 14px;font-size:0.78rem}
+
+/* LIVE STATUS WIDGET */
+.live-status{position:fixed;bottom:24px;right:20px;z-index:40;padding:8px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;font:500 0.72rem var(--mono);color:var(--mu);animation:fadeUp 1s 1s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.live-status i{display:block;width:6px;height:6px;border-radius:50%;background:var(--accent);animation:ping 2s infinite}
+
+/* REVEAL ANIMATION */
+.rv{opacity:0;transform:translateY(30px) scale(0.985);filter:blur(6px);transition:opacity 0.9s var(--ease),transform 1s var(--ease),filter 0.9s var(--ease);transition-delay:var(--d,0s)}
+.rv.on{opacity:1;transform:none;filter:none}
+
+/* FULLSCREEN CINEMATIC HERO SECTION */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 0 60px;overflow:hidden}
+.hero-bg-image{
+  position:absolute; inset:0; z-index:1;
+  background-image:url('assets/FotoBackground3.jpeg');
+  background-size:cover; background-position:center 25%;
+  filter:brightness(0.95) contrast(110%);
+  transition:transform 1.5s var(--ease);
+}
+.hero:hover .hero-bg-image{transform:scale(1.02)}
+.hero-vignette{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(6,7,9,0.98) 0%, rgba(6,7,9,0.8) 55%, rgba(6,7,9,0.4) 100%),
+    linear-gradient(to top, rgba(6,7,9,1) 0%, rgba(6,7,9,0.3) 30%, transparent 100%),
+    linear-gradient(to bottom, rgba(6,7,9,0.6) 0%, transparent 20%);
+}
+
+.hero-grid{display:grid;grid-template-columns:1fr;gap:30px;align-items:center;width:100%}
+.hero-content{max-width:680px}
+.avail{display:inline-flex;align-items:center;gap:10px;font:500 0.8rem var(--mono);color:var(--tx);padding:8px 16px;border-radius:999px;margin-bottom:20px}
+.avail b{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:ping 2.2s infinite}
+
+h1{
+  font-weight: 800;
+  font-size: clamp(2.6rem, 6.5vw, 5.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+  color: #fff;
+}
+h1 span{display:block}
+h1 span.serif{font-weight:300;color:var(--mu)}
+
+.typed{font:400 1.05rem var(--mono);color:var(--accent);margin-bottom:16px;min-height:1.9em}
+.typed::after{content:"_";animation:caret 1s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+.lead{color:var(--mu);max-width:52ch;font-size:1rem;margin-bottom:30px;line-height:1.7}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+
+/* SECTIONS */
+.s{padding:100px 0 0}
+.tag{display:inline-flex;align-items:center;gap:12px;font:500 0.82rem var(--mono);color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.1em}
+.tag::before{content:"";width:32px;height:2px;background:var(--accent)}
+h2{font:700 clamp(2rem, 4vw, 3.5rem)/1.06 var(--sans);letter-spacing:-0.04em;max-width:18ch;color:#fff}
+.about{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}
+.about p{color:var(--mu);font-size:1.02rem;margin-top:20px;max-width:50ch}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{padding:24px;border-radius:24px;transition:transform 0.5s var(--ease)}
+.stat:hover{transform:translateY(-6px);border-color:rgba(255,255,255,0.2)}
+.stat strong{display:block;font:700 2.6rem/1 var(--sans);letter-spacing:-0.05em;color:#fff;margin-bottom:8px}
+.stat span{font-size:0.85rem;color:var(--mu)}
+
+/* SKILLS & TERMINAL */
+.skills{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;margin-top:40px}
+.grp{padding:24px;border-radius:24px;margin-bottom:16px}
+.grp h3{font:600 0.95rem var(--sans);margin-bottom:16px;color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font:400 0.78rem var(--mono);padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--ln);color:var(--tx);transition:all 0.35s var(--ease)}
+.chips span:hover{border-color:var(--accent);color:#fff;transform:translateY(-3px);background:var(--accent-glow)}
+.term{border-radius:24px;overflow:hidden;background:rgba(10,12,16,0.85);font-family:var(--mono)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--ln)}
+.dots{display:flex;gap:6px;align-items:center;font-size:0.72rem;color:var(--mu)}
+.dots i{width:10px;height:10px;border-radius:50%;background:#333}.dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.tabs{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid var(--ln)}
+.tabs button{font:500 0.72rem var(--mono);padding:6px 12px;border-radius:999px;border:0;background:transparent;color:var(--mu);transition:all 0.3s var(--ease)}
+.tabs button[aria-selected=true]{background:rgba(255,255,255,0.18);color:#fff}
+.code{padding:20px;font-size:0.78rem;line-height:1.8;color:#d3d9e0;min-height:220px;overflow-x:auto;white-space:pre}
+.code[hidden]{display:none}
+.k{color:#ea580c}.st{color:#e2e8f0}.cm{color:#64748b}.fn{color:#94a3b8}
+
+/* PROJECTS */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.card{position:relative;padding:32px;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;min-height:360px;transition:transform 0.6s var(--ease),border-color 0.4s,box-shadow 0.6s}
+.card:hover{border-color:rgba(255,255,255,0.3);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 30px 60px -20px #000,0 0 50px -20px var(--accent-glow);transform:translateY(-6px)}
+.card .pill{align-self:flex-start;font:500 0.74rem var(--sans);padding:6px 14px;border-radius:999px;color:var(--accent);background:var(--accent-glow);border:1px solid rgba(234,88,12,0.4)}
+.card h3{font:700 clamp(1.5rem, 2.2vw, 2rem)/1.12 var(--sans);letter-spacing:-0.04em;margin:36px 0 12px;color:#fff}
+.card p{color:var(--mu);font-size:0.95rem;max-width:40ch}
+.stk{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.stk span{font:400 0.7rem var(--mono);color:#c0c8d1;background:rgba(255,255,255,0.06);border:1px solid var(--ln);padding:4px 10px;border-radius:999px}
+.card a{margin-top:auto;padding-top:24px;font-weight:600;font-size:0.9rem;color:#fff;display:inline-flex;gap:8px;align-items:center;transition:gap 0.35s var(--ease), color 0.3s}
+.card a:hover{gap:14px;color:var(--accent)}
+.orn{position:absolute!important;right:-30px;top:-30px;width:150px;height:150px;opacity:0.15;animation:spin 40s linear infinite}
+
+/* MUSIC & GUITAR STRINGS */
+.strings{margin:40px 0 48px;display:flex;flex-direction:column;gap:12px}
+.str{height:18px;display:flex;align-items:center}
+.str i{display:block;width:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2) 20%,rgba(234,88,12,0.6) 80%,transparent)}
+.str.p i{animation:pluck 1.1s ease-out}
+@keyframes pluck{0%{transform:scaleY(1)}12%{transform:scaleY(6) translateY(-2px)}28%{transform:scaleY(-4.5)}44%{transform:scaleY(3)}60%{transform:scaleY(-2)}78%{transform:scaleY(1.2)}100%{transform:scaleY(1)}}
+.mhead{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+.mhead p{color:var(--mu);max-width:44ch;font-size:0.95rem}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ph{background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit;display:block;transition:transform 0.5s var(--ease)}
+.ph:active{transform:scale(0.96)}
+.ph:nth-child(even){margin-top:32px}
+.ph .f{display:block;border-radius:24px;overflow:hidden;aspect-ratio:3/4;position:relative;padding:6px}
+.ph .f::after{content:"";position:absolute;inset:6px;border-radius:20px;background:linear-gradient(to top,rgba(6,7,9,0.85),transparent 45%);pointer-events:none}
+.ph img{display:block;width:100%;height:100%;object-fit:cover;border-radius:20px;filter:grayscale(100%) brightness(80%);transition:filter 0.6s,transform 1s var(--ease)}
+.ph:hover img{filter:grayscale(0%) brightness(100%);transform:scale(1.05)}
+.ph .cap{display:block;margin-top:10px;font-size:0.8rem;color:var(--mu);line-height:1.4}
+.ph .cap b{display:block;color:var(--tx);font-weight:600;font-size:0.85rem}
+
+/* FEEDBACK BOX */
+.feedback-box {
+  margin-top: 100px;
+  padding: 50px 40px;
+  border-radius: 36px;
+  background: var(--glass);
+  border: 1px solid var(--ln);
+}
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+}
+.feedback-box h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 14px; }
+.feedback-box p { color: var(--mu); font-size: 0.98rem; line-height: 1.6; }
+.feedback-form { display: flex; flex-direction: column; gap: 14px; }
+.feedback-form input, .feedback-form textarea {
+  width: 100%; padding: 14px 20px; border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--ln); color: #fff;
+  font-family: var(--sans); font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+.feedback-form input:focus, .feedback-form textarea:focus {
+  outline: none; border-color: var(--accent);
+}
+.feedback-form textarea { resize: vertical; min-height: 120px; }
+
+/* CONTACT BOX */
+.cbox{position:relative;margin-top:60px;padding:70px 40px;border-radius:36px;background:#0a0c10;text-align:center;overflow:hidden;isolation:isolate;border:1px solid var(--ln)}
+.cbox h2{margin:0 auto 14px;max-width:16ch;font-size: clamp(2rem, 3.5vw, 2.8rem)}
+.cbox p{color:var(--mu);max-width:44ch;margin:0 auto 30px;font-size:1rem}
+.cbox .cta{justify-content:center}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:60px 0 30px;font:400 0.8rem var(--sans);color:#64748b}
+.foot div{display:flex;gap:20px}.foot a{transition:color 0.3s}.foot a:hover{color:#fff}
+
+/* OVERLAYS */
+#lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,5,8,0.9);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);cursor:zoom-out}
+#lb.on{display:flex;animation:fd 0.35s var(--ease)}
+@keyframes fd{from{opacity:0}}
+#lb figure{max-width:800px;padding:10px;border-radius:28px;position:relative;background:var(--surface);border:1px solid var(--ln)}
+#lb img{display:block;max-width:100%;max-height:70vh;margin:auto;border-radius:20px}
+#lb figcaption{text-align:center;margin:12px 0 4px;font:500 0.82rem var(--sans);color:#fff}
+#lbx{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:1px solid var(--hl);background:#1a2230;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#toast{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;z-index:110;padding:12px 24px;border-radius:999px;background:rgba(20,24,32,0.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid var(--accent);color:#fff;font:600 0.85rem var(--sans);transform:translate(-50%,80px) scale(0.9);opacity:0;transition:all 0.5s var(--ease);box-shadow:0 15px 35px var(--accent-glow)}
+#toast.on{transform:translate(-50%,0) scale(1);opacity:1}
+
+/* RESPONSIVE DESIGN */
+@media(max-width:900px){
+  .wrap{padding:0 20px;}
+  .hero-grid,.about,.skills,.cards,.feedback-grid{grid-template-columns:1fr;gap:32px;}
+  .hero{padding-top:100px;min-height:auto;padding-bottom:100px;}
+  .hero-bg-image{background-position: center center; filter: brightness(0.9) contrast(105%);}
+  .hero-vignette{
+    background:
+      linear-gradient(to bottom, rgba(6,7,9,0.85) 0%, rgba(6,7,9,0.7) 40%, rgba(6,7,9,0.9) 100%),
+      radial-gradient(circle at center, transparent 20%, rgba(6,7,9,0.8) 100%);
+  }
+  .gal{grid-template-columns:1fr 1fr;gap:12px;}
+  .s{padding-top:80px;}
+  .cbox{padding:48px 20px;margin-top:80px;border-radius:28px;}
+  .feedback-box {padding:36px 20px;margin-top:80px;border-radius:28px;}
+  body{padding-bottom:110px;}
+  nav{top:auto;bottom:16px;background:rgba(12,14,18,0.92);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid var(--hl);box-shadow:0 20px 40px rgba(0,0,0,0.6);padding:6px 12px;}
+  nav .lg{display:none;}
+  nav .l a{padding:8px 10px;font-size:0.75rem;}
+  nav .btn{padding:6px 12px;font-size:0.75rem;}
+  .live-status {display: none;}
+  h1{font-size:clamp(2.4rem, 9vw, 3.6rem);}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none;filter:none}}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="custom-cursor" id="cursor"></div>
+
+<div id="prog" aria-hidden="true"></div>
+<div class="bg-ambient" aria-hidden="true"></div>
+<div id="glow" aria-hidden="true"></div>
+<div id="toast" role="status">Email copied successfully</div>
+<div id="lb" onclick="closeLb()" role="dialog" aria-modal="true" aria-label="Photo preview"><figure onclick="event.stopPropagation()"><button id="lbx" onclick="closeLb()" aria-label="Close">×</button><img id="lb-img" src="" alt=""><figcaption id="lb-cap"></figcaption></figure></div>
+
+<!-- LIVE STATUS WIDGET -->
+<div class="live-status">
+  <i></i> Yogyakarta, ID — <span id="live-time">00:00</span>
+</div>
+
+<nav>
+  <a href="#" class="lg">ridho<i>.faiq</i></a>
+  <div class="l"><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#personal">Music</a></div>
+  <button class="btn" onclick="copyText('ridhofaiqzzz@gmail.com','Email copied successfully')">Copy email</button>
+</nav>
+
+<!-- FULLSCREEN HERO SECTION -->
+<header class="hero">
+  <div class="hero-bg-image"></div>
+  <div class="hero-vignette"></div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-content">
+      <div class="avail rv"><b></b>Open for internship / IT Placement</div>
+      <h1 class="rv" style="--d:.1s">Ridho Faiq <span class="serif">Ahmad</span></h1>
+      <div class="typed rv" style="--d:.2s" id="typed"></div>
+      <p class="lead rv" style="--d:.3s">Hello, I am a 5th-semester Information Technology student at Universitas Muhammadiyah Yogyakarta, passionate about Backend RESTful API development and Android interfaces using Kotlin Compose.</p>
+      
+      <div class="cta rv" style="--d:.4s">
+        <a href="#projects" class="btn">View projects</a>
+        <button class="btn accent" onclick="openLb(this)" data-src="assets/CV_KW.jpeg" data-cap="Curriculum Vitae - Ridho Faiq Ahmad">View / Download CV ↗</button>
+        <a href="https://github.com/faiqzzz" target="_blank" rel="noopener" class="btn o">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/ridho-faiq-ahmad-6a0157402/" target="_blank" rel="noopener" class="btn o">LinkedIn ↗</a>
+        <a href="https://instagram.com/ridhofaiqq/" target="_blank" rel="noopener" class="btn o">Instagram ↗</a>
+        <a href="https://tiktok.com/@telasdo" target="_blank" rel="noopener" class="btn o">TikTok ↗</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="s" id="about">
+    <div class="about">
+      <div class="rv">
+        <span class="tag">01 // About Me</span>
+        <h2>Exploring code and practical systems</h2>
+        <p>I explore software architecture through coursework and independent practice. Experienced in building scalable backend services with Node.js, Express.js, Sequelize, and PostgreSQL, along with responsive Android interfaces using Kotlin, Jetpack Compose, and MVVM architecture.</p>
+      </div>
+      <div class="stats">
+        <div class="stat rv" style="--d:.05s"><strong data-n="5">0</strong><span>Semesters completed</span></div>
+        <div class="stat rv" style="--d:.15s"><strong data-n="2">0</strong><span>Practical projects</span></div>
+        <div class="stat rv" style="--d:.25s"><strong data-n="8">0</strong><span>Tools & technologies</span></div>
+        <div class="stat rv" style="--d:.35s"><strong data-n="2">0</strong><span>Organizations & clubs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="skills">
+    <div class="rv"><span class="tag">02 // Technical Skills</span><h2>Tech stack & code terminal</h2></div>
+    <div class="skills">
+      <div class="rv">
+        <div class="grp"><h3>Backend & databases</h3><div class="chips"><span>Node.js</span><span>Express.js</span><span>PostgreSQL</span><span>Sequelize ORM</span></div></div>
+        <div class="grp"><h3>Mobile & tools</h3><div class="chips"><span>Kotlin</span><span>Jetpack Compose</span><span>Git / GitHub</span><span>Postman</span></div></div>
+      </div>
+      <div class="term rv" style="--d:.15s">
+        <div class="bar">
+          <div class="dots"><i></i><i></i><i></i><span>ridho-dev ~ zsh</span></div>
+          <div class="tabs" role="tablist">
+            <button role="tab" id="t-node" aria-selected="true" onclick="tab('node')">Node.js API</button>
+            <button role="tab" id="t-compose" aria-selected="false" onclick="tab('compose')">Compose UI</button>
+          </div>
+        </div>
+        <div class="code" id="c-node"><span class="cm">// Express.js controller</span>
+<span class="k">const</span> express = <span class="fn">require</span>(<span class="st">'express'</span>);
+
+router.<span class="k">get</span>(<span class="st">'/api/v1/comics'</span>, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> comics = <span class="k">await</span> Comic.<span class="fn">findAll</span>();
+  res.<span class="fn">json</span>({ status: <span class="st">'OK'</span>, data: comics });
+});</div>
+        <div class="code" id="c-compose" hidden><span class="cm">// Jetpack Compose view</span>
+<span class="k">@Composable</span>
+<span class="k">fn</span> <span class="fn">ComicScreen</span>(viewModel: MainViewModel) {
+  <span class="k">val</span> uiState <span class="k">by</span> viewModel.uiState.<span class="fn">collectAsState</span>()
+  <span class="fn">LazyColumn</span> { items(uiState.items) { item -> <span class="fn">Card</span>(item) } }
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="projects">
+    <div class="rv"><span class="tag">03 // Portfolio</span><h2>Academic projects</h2></div>
+    <div class="cards">
+      <article class="card rv">
+        <svg class="orn" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="96" stroke="#ffffff" stroke-dasharray="3 8"/><circle cx="100" cy="100" r="62" stroke="#ffffff" stroke-opacity=".4"/></svg>
+        <span class="pill">Backend REST API</span>
+        <h3>Comic Management API</h3>
+        <p>Practicum RESTful API for comic data management, featuring JWT authentication, Joi validation, and PostgreSQL integration via Sequelize ORM.</p>
+        <div class="stk"><span>Node.js</span><span>Express.js</span><span>PostgreSQL</span><span>JWT</span><span>Joi</span></div>
+        <a href="https://github.com/faiqzzz" target="_blank" rel="noopener">View repository <span>↗</span></a>
+      </article>
+      <article class="card rv" style="--d:.12s">
+        <svg class="orn" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="96" stroke="#ffffff" stroke-dasharray="3 8"/><circle cx="100" cy="100" r="62" stroke="#ffffff" stroke-opacity=".4"/></svg>
+        <span class="pill">Android App</span>
+        <h3>Android MVVM Architecture</h3>
+        <p>Android application featuring declarative Jetpack Compose UI, StateFlow state management, and MVVM architecture.</p>
+        <div class="stk"><span>Kotlin</span><span>Jetpack Compose</span><span>StateFlow</span><span>MVVM</span></div>
+        <a href="https://github.com/faiqzzz" target="_blank" rel="noopener">View repository <span>↗</span></a>
+      </article>
+    </div>
+  </section>
+
+  <section class="s" id="personal">
+    <div class="mhead rv">
+      <div><span class="tag">04 // Beyond the Screen</span><h2>Music and creative balance</h2></div>
+      <p>"In the quiet hum of the terminal and the resonance of steel strings, I translate the rhythm of my soul into logic and melody—where every line of code and every chord seeks its own perfection."</p>
+    </div>
+    <div class="strings rv" aria-label="Interactive guitar strings, hover to pluck">
+      <div class="str"><i style="height:1px"></i></div><div class="str"><i style="height:1px"></i></div><div class="str"><i style="height:1.5px"></i></div>
+      <div class="str"><i style="height:2px"></i></div><div class="str"><i style="height:2.5px"></i></div><div class="str"><i style="height:3px"></i></div>
+    </div>
+    <div class="gal">
+      <button class="ph rv" onclick="openLb(this)" data-src="assets/WhatsApp Image 2026-11-06 at 6.26.21 PM.jpeg" data-cap="MATAF FKG UMY 2026">
+        <span class="f sk"><img loading="lazy" src="assets/FotoGitar1.jpeg" alt="Playing guitar at MATAF FKG UMY 2026"></span>
+        <span class="cap"><b>Event : MATAF FKG UMY 2026</b>Universitas Muhammadiyah Yogyakarta, Yogyakarta</span>
+      </button>
+      <button class="ph rv" style="--d:.1s" onclick="openLb(this)" data-src="assets/WhatsApp Image 2026-11-06 at 6.40.21 PM.jpeg" data-cap="Jamming session at Merah Putih Coffee Magelang">
+        <span class="f sk"><img loading="lazy" src="assets/FotoGitar2.jpeg" alt="Jamming session at Merah Putih Coffee"></span>
+        <span class="cap"><b>Event : Jamming session</b>Merah Putih Coffee, Magelang</span>
+      </button>
+      <button class="ph rv" style="--d:.2s" onclick="openLb(this)" data-src="assets/WhatsApp Image 2026-11-06 at 9.37.28 PM.jpeg" data-cap="SpectaWave at Sleman City Hall Yogyakarta">
+        <span class="f sk"><img loading="lazy" src="assets/FotoGitar3.jpeg" alt="SpectaWave at Sleman City Hall"></span>
+        <span class="cap"><b>Event : SpectaWave</b>Sleman City Hall, Yogyakarta</span>
+      </button>
+      <button class="ph rv" style="--d:.3s" onclick="openLb(this)" data-src="assets/WhatsApp Image 2026-11-06 at 9.37.28 PM (1).jpeg" data-cap="Electrical Shokwave UMY">
+        <span class="f sk"><img loading="lazy" src="assets/FotoGitar4.jpeg" alt="Electrical Shokwave UMY"></span>
+        <span class="cap"><b>Event : Electrical Shokwave</b>Universitas Muhammadiyah Yogyakarta, Yogyakarta</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- FEEDBACK BOX -->
+  <section class="feedback-box rv" id="feedback">
+    <div class="feedback-grid">
+      <div>
+        <span class="tag">05 // Feedback Box</span>
+        <h2>Criticism & Suggestions</h2>
+        <p>Have feedback, ideas, or evaluations for this portfolio? Feel free to send them directly through the form!</p>
+      </div>
+      <form class="feedback-form" onsubmit="submitFeedback(event)">
+        <input type="text" id="fb-name" placeholder="Your Name / Institution (Optional)">
+        <textarea id="fb-msg" placeholder="Write your feedback or suggestions here..." required></textarea>
+        <button type="submit" class="btn accent" style="align-self: flex-start;">Send Message →</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="cbox rv" id="contact">
+    <h2>Let's discuss internship opportunities</h2>
+    <p>I am currently seeking internship or IT Practical Work opportunities. Reach out via email or LinkedIn.</p>
+    <div class="cta">
+      <button class="btn" onclick="copyText('ridhofaiqzzz@gmail.com','Email copied successfully')">Copy email</button>
+      <a class="btn o" href="https://www.linkedin.com/in/ridho-faiq-ahmad-6a0157402/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>© 2026 Ridho Faiq Ahmad, IT UMY</span>
+    <div><a href="https://www.linkedin.com/in/ridho-faiq-ahmad-6a0157402/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/faiqzzz" target="_blank" rel="noopener">GitHub</a></div>
+  </footer>
+</main>
+
+<script>
+const R=document.documentElement,reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const isTouch = matchMedia('(hover:none)').matches;
+let lastFocus=null;
+
+/* CUSTOM CURSOR LOGIC */
+const cursor = document.getElementById('cursor');
+if(!isTouch && cursor) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  const interactiveElements = document.querySelectorAll('a, button, input, textarea, .str, .ph');
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+}
+
+/* REAL-TIME CLOCK WIDGET */
+function updateTime() {
+  const timeEl = document.getElementById('live-time');
+  if(!timeEl) return;
+  const now = new Date();
+  const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: true };
+  timeEl.textContent = now.toLocaleTimeString('en-US', options);
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+/* SUBMIT FEEDBACK FUNCTION (Connected to Live Backend Render) */
+async function submitFeedback(e) {
+  e.preventDefault();
+  const name = document.getElementById('fb-name').value || 'Anonymous';
+  const message = document.getElementById('fb-msg').value;
+
+  if(!message.trim()) {
+    copyText('', 'Pesan tidak boleh kosong!');
+    return;
+  }
+
+  try {
+    const response = await fetch('https://portofolio-backend-y6q2.onrender.com/api/feedbacks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, message })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      copyText('', 'Terima kasih! Pesanmu berhasil terkirim ke database 🎉');
+      document.querySelector('.feedback-form').reset();
+    } else {
+      copyText('', 'Gagal mengirim pesan: ' + (result.error || 'Terjadi kesalahan'));
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    copyText('', 'Tidak dapat terhubung ke server backend.');
+  }
+}
+
+/* Lightbox Modal */
+function openLb(el){lastFocus=el;const i=document.getElementById('lb-img');i.src=el.dataset.src;i.alt=el.dataset.cap;document.getElementById('lb-cap').textContent=el.dataset.cap;document.getElementById('lb').classList.add('on');document.getElementById('lbx').focus()}
+function closeLb(){document.getElementById('lb').classList.remove('on');if(lastFocus)lastFocus.focus()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
+
+/* Tab Terminal */
+function tab(n){['node','compose'].forEach(k=>{document.getElementById('c-'+k).hidden=k!==n;document.getElementById('t-'+k).setAttribute('aria-selected',k===n)})}
+
+/* Toast Clipboard */
+function copyText(t,m){try{if(t)navigator.clipboard.writeText(t)}catch(e){}const x=document.getElementById('toast');x.textContent=m;x.classList.add('on');setTimeout(()=>x.classList.remove('on'),2800)}
+
+/* Scroll Reveal & Counter Stats */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  e.target.classList.add('on');io.unobserve(e.target);
+  const n=e.target.querySelector('[data-n]');
+  if(n){const to=+n.dataset.n;let v=0;const t=setInterval(()=>{v++;n.textContent=v;if(v>=to)clearInterval(t)},to>5?110:170)}
+}),{threshold:.15});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* Typing Effect */
+const roles=[
+    'Seeking Internship / IT Placement',
+    'IT Student & Code Explorer',
+    'Backend & Mobile App Learner',
+    'Exploring Node.js & Kotlin Compose'
+];
+const tp=document.getElementById('typed');let ri=0,ci=0,del=false;
+(function type(){
+  const w=roles[ri];
+  if(!tp) return;
+  tp.textContent=w.slice(0,ci);
+  if(!del&&ci<w.length){ci++;setTimeout(type,80)}
+  else if(!del){del=true;setTimeout(type,1700)}
+  else if(ci>0){ci--;setTimeout(type,38)}
+  else{del=false;ri=(ri+1)%roles.length;setTimeout(type,300)}
+})();
+
+/* Pointer Glow Tracking */
+const glow=document.getElementById('glow');
+addEventListener('pointermove',e=>{if(!isTouch && glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';}});
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{
+  if(!isTouch){const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');}
+}));
+
+/* Guitar Strings Interactivity */
+document.querySelectorAll('.str').forEach(s=>s.addEventListener('mouseenter',()=>{
+  s.classList.remove('p');void s.offsetWidth;s.classList.add('p');
+}));
+
+/* Scroll Progress Line */
+let tk=0;
+function onScroll(){if(tk)return;tk=requestAnimationFrame(()=>{tk=0;const y=scrollY,h=R.scrollHeight-innerHeight;R.style.setProperty('--p',h>0?(y/h).toFixed(4):0)})}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* Magnetic Button Motion */
+if(!isTouch&&!reduce)document.querySelectorAll('.btn').forEach(b=>{
+  b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.translate=((e.clientX-r.left-r.width/2)*0.18)+'px '+((e.clientY-r.top-r.height/2)*.28)+'px'});
+  b.addEventListener('pointerleave',()=>b.style.translate='');
+});
+
+/* Active Nav Observer */
+const links=[...document.querySelectorAll('nav .l a')];
+const spy=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));
+}),{rootMargin:'-45% 0px -50% 0px'});
+['about','skills','projects','personal'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) spy.observe(el);
+});
+</script>
+</body>
+</html>
